@@ -24,9 +24,10 @@
 
 	let captchaCode = $state(generateCaptcha());
 
-	async function handleLogin(e: SubmitEvent) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
 		errorMsg = '';
+		successMsg = '';
 
 		if (!username.trim() || !password.trim()) {
 			errorMsg = 'Please enter both username and password.';
@@ -58,11 +59,6 @@
 				} else {
 					goto('/dashboard/bidder');
 				}
-			}
-			if (res.user.role === 'admin') {
-				goto('/dashboard/officer');
-			} else {
-				goto('/dashboard/bidder');
 			}
 		} catch (err: any) {
 			errorMsg = err.message || 'Login failed. Please check your credentials.';
