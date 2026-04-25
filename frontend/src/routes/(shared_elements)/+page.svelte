@@ -170,7 +170,7 @@
 						>
 					</div>
 					<h3 class="portal-title">Vendor Portal</h3>
-					<a href="#" class="btn-dark">Access Tenders &amp; Payments</a>
+					<a href="/login" class="btn-dark">Access Tenders &amp; Payments</a>
 				</div>
 
 				<div class="portal-card" data-purpose="portal-card">
@@ -182,7 +182,7 @@
 						>
 					</div>
 					<h3 class="portal-title">Employee Login</h3>
-					<a href="#" class="btn-dark">Sign In</a>
+					<a href="/login" class="btn-dark">Sign In</a>
 				</div>
 			</div>
 		</div>
