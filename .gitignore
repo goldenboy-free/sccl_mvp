@@ -1,0 +1,10 @@
+node_modules/
+.env
+.DS_Store
+sccl.db
+sccl.db-journal
+sccl.db-wal
+sccl.db-shm
+.svelte-kit/
+build/
+dist/
