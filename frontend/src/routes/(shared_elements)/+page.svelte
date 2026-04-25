@@ -8,21 +8,24 @@
 			alt: 'Open cast mine operations',
 			title: 'Fueling the <br />Nation\'s Progress',
 			subtitle: 'Responsible Mining, Sustainable Future.',
-			cta: 'Explore Our Operations'
+			cta: 'Explore Our Operations',
+			link: '/business'
 		},
 		{
 			image: '/images/mining-equipment.jpeg',
 			alt: 'Coal production facility',
 			title: 'Powering India\'s <br />Energy Future',
 			subtitle: 'Leading coal production with world-class safety standards.',
-			cta: 'View Production Stats'
+			cta: 'View Production Stats',
+			link: '/performance'
 		},
 		{
 			image: '/images/community-program.jpeg',
 			alt: 'Community development program',
 			title: 'Building Stronger <br />Communities',
 			subtitle: 'Committed to social responsibility and sustainable growth.',
-			cta: 'Our CSR Initiatives'
+			cta: 'Our CSR Initiatives',
+			link: '/sustainability'
 		}
 	];
 
@@ -90,7 +93,7 @@
 				<div class="hero-content">
 					<h1 class="hero-title">{@html slides[currentSlide].title}</h1>
 					<p class="hero-subtitle">{slides[currentSlide].subtitle}</p>
-					<a href="#" class="btn-gold">{slides[currentSlide].cta}</a>
+					<a href={slides[currentSlide].link} class="btn-gold">{slides[currentSlide].cta}</a>
 				</div>
 			</div>
 		</div>

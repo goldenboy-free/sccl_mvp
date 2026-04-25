@@ -12,7 +12,7 @@ router.use(authenticateToken);
 router.post('/tender/:tenderId', authorizeRole(['bidder']), async (req, res) => {
     try {
         const tender = await Tender.findTenderById(req.params.tenderId);
-        if (!tender || new Date() >= tender.closing_date) return res.status(403).send('Bid not allowed');
+        if (!tender || new Date() >= new Date(tender.closing_date)) return res.status(403).send('Bid not allowed');
         const amount = req.body.amount;
         if (!amount || amount <= 0) {
             return res.status(403).send('Bid amount invalid');
