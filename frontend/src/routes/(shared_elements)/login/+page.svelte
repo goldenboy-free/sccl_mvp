@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { login } from '$lib/api';
+	import { login, register } from '$lib/api';
 	import { auth } from '$lib/stores/auth';
 
 	let activeTab = $state<'bidder' | 'officer'>('bidder');
+	let isRegistering = $state(false);
 	let showPassword = $state(false);
 	let username = $state('');
 	let password = $state('');
 	let captchaInput = $state('');
 	let errorMsg = $state('');
+	let successMsg = $state('');
 	let loading = $state(false);
 
 	function generateCaptcha(): string {
@@ -40,8 +42,23 @@
 
 		loading = true;
 		try {
-			const res = await login(username, password);
-			auth.login(res.token, res.user);
+			if (isRegistering) {
+				const role = activeTab === 'officer' ? 'admin' : 'bidder';
+				await register(username, password, role);
+				successMsg = 'Registration successful! You can now login.';
+				isRegistering = false;
+				password = '';
+				captchaCode = generateCaptcha();
+				captchaInput = '';
+			} else {
+				const res = await login(username, password);
+				auth.login(res.token, res.user);
+				if (res.user.role === 'admin') {
+					goto('/dashboard/officer');
+				} else {
+					goto('/dashboard/bidder');
+				}
+			}
 			if (res.user.role === 'admin') {
 				goto('/dashboard/officer');
 			} else {
@@ -80,14 +97,20 @@
 	<div class="right-panel">
 		<div class="login-card">
 			<div class="card-header">
-				<h2 class="card-title">{activeTab === 'bidder' ? 'Bidder Login' : 'Officer Login'}</h2>
+				<h2 class="card-title">
+					{#if isRegistering}
+						{activeTab === 'bidder' ? 'Bidder Registration' : 'Officer Registration'}
+					{:else}
+						{activeTab === 'bidder' ? 'Bidder Login' : 'Officer Login'}
+					{/if}
+				</h2>
 				<p class="card-subtitle">{activeTab === 'bidder' ? 'Secure access to the SCCL procurement ecosystem' : 'Internal SCCL staff authentication portal'}</p>
 			</div>
 
 			<!-- Tab Switcher -->
 			<div class="tab-switcher">
-				<button class="tab-btn" class:active={activeTab === 'bidder'} id="tab-bidder" onclick={() => activeTab = 'bidder'}>Bidder Login</button>
-				<button class="tab-btn" class:active={activeTab === 'officer'} id="tab-officer" onclick={() => activeTab = 'officer'}>SCCL Officer Login</button>
+				<button type="button" class="tab-btn" class:active={activeTab === 'bidder'} id="tab-bidder" onclick={() => activeTab = 'bidder'}>Bidder</button>
+				<button type="button" class="tab-btn" class:active={activeTab === 'officer'} id="tab-officer" onclick={() => activeTab = 'officer'}>SCCL Officer</button>
 			</div>
 
 			{#if errorMsg}
@@ -96,8 +119,13 @@
 					{errorMsg}
 				</div>
 			{/if}
+			{#if successMsg}
+				<div class="success-banner" style="background:#bbf7d0; color:#166534; padding:8px; border-radius:4px; margin-bottom:16px; font-size:13px; font-weight:500;">
+					{successMsg}
+				</div>
+			{/if}
 
-			<form class="login-form" novalidate onsubmit={handleLogin}>
+			<form class="login-form" novalidate onsubmit={handleSubmit}>
 				<!-- Username -->
 				<div class="field-group">
 					<label class="field-label" for="username">{activeTab === 'bidder' ? 'Bidder ID' : 'Employee ID'}</label>
@@ -160,8 +188,12 @@
 				<!-- Actions -->
 				<div class="action-group">
 					<button type="submit" class="btn-primary" disabled={loading}>
-						{loading ? 'Signing in...' : 'Secure Login'}
-						{#if !loading}<span class="material-symbols-outlined btn-arrow">arrow_forward</span>{/if}
+						{#if loading}
+							{isRegistering ? 'Registering...' : 'Signing in...'}
+						{:else}
+							{isRegistering ? 'Register' : 'Secure Login'}
+							<span class="material-symbols-outlined btn-arrow">arrow_forward</span>
+						{/if}
 					</button>
 
 					<div class="divider">
@@ -170,9 +202,9 @@
 						<span class="divider-line"></span>
 					</div>
 
-					<button type="button" class="btn-secondary">
-						<span class="material-symbols-outlined">workspace_premium</span>
-						Login with DSC (Class 3)
+					<button type="button" class="btn-secondary" onclick={() => isRegistering = !isRegistering}>
+						<span class="material-symbols-outlined">{isRegistering ? 'login' : 'person_add'}</span>
+						{isRegistering ? 'I already have an account' : 'Create a new account'}
 					</button>
 				</div>
 			</form>
