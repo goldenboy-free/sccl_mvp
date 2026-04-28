@@ -227,9 +227,8 @@
    MAIN LAYOUT
    ============================================================ */
 .main-content {
-  flex: 1;
   display: flex;
-  overflow: hidden;
+  min-height: calc(100vh - 64px);
 }
 
 /* ============================================================
@@ -318,9 +317,9 @@
   background: var(--color-white);
   overflow-y: auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: var(--spacing-lg) var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-xl);
 }
 
 /* ============================================================
