@@ -1,5 +1,7 @@
 node_modules/
 .env
+.env.local
+.env.production
 .DS_Store
 sccl.db
 sccl.db-journal
@@ -8,3 +10,4 @@ sccl.db-shm
 .svelte-kit/
 build/
 dist/
+.vercel/
