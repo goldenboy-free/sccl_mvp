@@ -1,6 +1,6 @@
-import { PUBLIC_API_URL } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 
-const API_BASE = PUBLIC_API_URL || 'http://localhost:3000';
+const API_BASE = env.PUBLIC_API_URL || 'http://localhost:3000';
 
 /** Generic fetch wrapper with auth support */
 async function request<T>(
